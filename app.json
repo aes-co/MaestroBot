@@ -1,0 +1,56 @@
+{
+  "name": "MaestroBot",
+  "description": "A modular Telegram music bot with playlist, queue, and web dashboard.",
+  "repository": "https://github.com/yourusername/MaestroBot",
+  "keywords": [
+    "telegram",
+    "bot",
+    "music",
+    "python",
+    "mongodb"
+  ],
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Telegram bot token",
+      "required": true
+    },
+    "MONGO_URL": {
+      "description": "MongoDB connection string",
+      "required": true
+    },
+    "API_ID": {
+      "description": "Telegram API ID (for userbot)",
+      "required": false
+    },
+    "API_HASH": {
+      "description": "Telegram API hash (for userbot)",
+      "required": false
+    },
+    "SESSION_STRING": {
+      "description": "Pyrogram session string (for userbot)",
+      "required": false
+    },
+    "OWNER_ID": {
+      "description": "Telegram user ID of the owner",
+      "required": true
+    },
+    "SUDO_USERS": {
+      "description": "Comma separated Telegram user IDs for sudo access",
+      "required": false
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "addons": [
+    "mongolab"
+  ]
+}

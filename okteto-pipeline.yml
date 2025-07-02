@@ -1,0 +1,6 @@
+name: MaestroBot Pipeline
+
+deploy:
+  - okteto build -t maestro-bot:dev .
+  - kubectl apply -f k8s/deployment.yaml
+  - kubectl apply -f k8s/service.yaml

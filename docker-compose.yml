@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  maestrobot:
+    build: .
+    command: python -m maestrobot
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - MONGO_URL=${MONGO_URL}
+      - API_ID=${API_ID}
+      - API_HASH=${API_HASH}
+      - SESSION_STRING=${SESSION_STRING}
+      - OWNER_ID=${OWNER_ID}
+      - SUDO_USERS=${SUDO_USERS}
+    volumes:
+      - ./downloads:/app/downloads
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:6
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
