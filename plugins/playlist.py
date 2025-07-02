@@ -1,82 +1,72 @@
-from maestrobot.db.queues import db
-
-# === PLAYLIST PER USER (PERSISTENT) ===
-
-async def add_to_playlist(user_id: int, song: dict):
-    await db.user_playlists.update_one(
-        {"user_id": user_id},
-        {"$push": {"songs": song}},
-        upsert=True
-    )
-
-async def get_playlist(user_id: int, limit: int = 20):
-    doc = await db.user_playlists.find_one({"user_id": user_id})
-    return doc.get("songs", [])[-limit:] if doc and "songs" in doc else []
-
-async def remove_from_playlist(user_id: int, index: int):
-    doc = await db.user_playlists.find_one({"user_id": user_id})
-    if not doc or "songs" not in doc or index < 0 or index >= len(doc["songs"]):
-        return False
-    songs = doc["songs"]
-    removed = songs.pop(index)
-    await db.user_playlists.update_one(
-        {"user_id": user_id},
-        {"$set": {"songs": songs}}
-    )
-    return removed
-
-async def clear_playlist(user_id: int):
-    await db.user_playlists.update_one(
-        {"user_id": user_id},
-        {"$set": {"songs": []}}
-    )
-
-# === HANDLER COMMAND UNTUK PLAYLIST ===
-
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext
+from maestrobot.db.playlists import (
+    save_playlist,
+    get_playlists,
+    get_playlist,
+    delete_playlist
+)
+from maestrobot.player import get_current_queue, add_to_queue
 
-async def playlist_command(update: Update, context: CallbackContext):
-    user_id = update.effective_user.id
-    playlist = await get_playlist(user_id)
-    if not playlist:
-        await update.message.reply_text("🎶 Playlist kamu kosong.")
-        return
-    text = "🎶 <b>Playlist Kamu:</b>\n"
-    for idx, song in enumerate(playlist, 1):
-        text += f"{idx}. <b>{song['title']}</b> — <i>{song.get('uploader','')}</i>\n"
-    await update.message.reply_text(text, parse_mode="HTML")
-
-async def addpl_command(update: Update, context: CallbackContext):
+async def saveplaylist_command(update: Update, context: CallbackContext):
     user_id = update.effective_user.id
     if not context.args:
-        await update.message.reply_text("Kirim: /addpl <judul/link lagu>")
+        await update.message.reply_text("Kirim: /saveplaylist <nama_playlist>")
         return
-    query = " ".join(context.args)
-    from maestrobot.media.downloader import download_audio
-    song = await download_audio(query)
-    await add_to_playlist(user_id, song)
-    await update.message.reply_text(f"✅ Ditambahkan ke playlist: <b>{song['title']}</b>", parse_mode="HTML")
 
-async def removepl_command(update: Update, context: CallbackContext):
-    user_id = update.effective_user.id
-    if not context.args or not context.args[0].isdigit():
-        await update.message.reply_text("Kirim: /removepl <nomor_lagu>")
+    name = context.args[0].lower()
+    queue = get_current_queue(update.effective_chat.id)
+    if not queue:
+        await update.message.reply_text("Tidak ada lagu dalam antrian.")
         return
-    index = int(context.args[0]) - 1
-    removed = await remove_from_playlist(user_id, index)
-    if removed:
-        await update.message.reply_text(f"❌ Dihapus dari playlist: <b>{removed['title']}</b>", parse_mode="HTML")
+
+    await save_playlist(user_id, name, queue)
+    await update.message.reply_text(f"✅ Playlist '{name}' berhasil disimpan!")
+
+async def myplaylist_command(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    playlists = await get_playlists(user_id)
+    if not playlists:
+        await update.message.reply_text("Kamu belum menyimpan playlist apa pun.")
+        return
+
+    text = "📂 Playlist kamu:\n\n"
+    for name, tracks in playlists.items():
+        text += f"• <b>{name}</b> ({len(tracks)} lagu)\n"
+    await update.message.reply_text(text, parse_mode="HTML")
+
+async def playplaylist_command(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    if not context.args:
+        await update.message.reply_text("Kirim: /playplaylist <nama_playlist>")
+        return
+
+    name = context.args[0].lower()
+    tracks = await get_playlist(user_id, name)
+    if not tracks:
+        await update.message.reply_text("Playlist tidak ditemukan atau kosong.")
+        return
+
+    for track in tracks:
+        await add_to_queue(chat_id, track)
+    await update.message.reply_text(f"▶️ Memutar playlist '{name}' ({len(tracks)} lagu).")
+
+async def delplaylist_command(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    if not context.args:
+        await update.message.reply_text("Kirim: /delplaylist <nama_playlist>")
+        return
+
+    name = context.args[0].lower()
+    ok = await delete_playlist(user_id, name)
+    if not ok:
+        await update.message.reply_text("Gagal menghapus playlist atau tidak ditemukan.")
     else:
-        await update.message.reply_text("Gagal menghapus. Pastikan nomor benar.")
-
-async def clearpl_command(update: Update, context: CallbackContext):
-    user_id = update.effective_user.id
-    await clear_playlist(user_id)
-    await update.message.reply_text("🎶 Playlist kamu dikosongkan.")
+        await update.message.reply_text(f"🗑 Playlist '{name}' dihapus.")
 
 def setup(dispatcher):
-    dispatcher.add_handler(CommandHandler("playlist", playlist_command))
-    dispatcher.add_handler(CommandHandler("addpl", addpl_command))
-    dispatcher.add_handler(CommandHandler("removepl", removepl_command))
-    dispatcher.add_handler(CommandHandler("clearpl", clearpl_command))
+    dispatcher.add_handler(CommandHandler("saveplaylist", saveplaylist_command))
+    dispatcher.add_handler(CommandHandler("myplaylist", myplaylist_command))
+    dispatcher.add_handler(CommandHandler("playplaylist", playplaylist_command))
+    dispatcher.add_handler(CommandHandler("delplaylist", delplaylist_command))

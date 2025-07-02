@@ -1,7 +1,5 @@
-import yt_dlp
 import asyncio
-
-# Fungsi utama download audio (untuk queue, playlist, dsb)
+import yt_dlp
 
 YTDL_OPTS = {
     "format": "bestaudio/best",
@@ -17,16 +15,12 @@ YTDL_OPTS = {
 }
 
 async def download_audio(query: str):
-    """
-    Download audio dari YouTube/Spotify dan return info lagu.
-    """
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(None, _download_audio_sync, query)
 
 def _download_audio_sync(query):
     with yt_dlp.YoutubeDL(YTDL_OPTS) as ydl:
         info = ydl.extract_info(query, download=False)
-        # Untuk hasil pencarian, ambil entri pertama
         if "entries" in info:
             info = info["entries"][0]
         return {

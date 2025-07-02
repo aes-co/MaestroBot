@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maestrobot-mongo
+  labels:
+    app: maestrobot
+spec:
+  replicas: 1  # Jumlah instance MongoDB
+  selector:
+    matchLabels:
+      app: maestrobot
+  template:
+    metadata:
+      labels:
+        app: maestrobot
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:6  # Menggunakan image MongoDB versi 6
+          ports:
+            - containerPort: 27017  # Port default MongoDB
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: maestrobot-secrets
+                  key: mongo_username
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: maestrobot-secrets
+                  key: mongo_password
+            - name: MONGO_INITDB_DATABASE
+              value: maestrobot  # Nama database default yang digunakan
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data
+          persistentVolumeClaim:
+            claimName: mongo-pvc  # PVC untuk menyimpan data MongoDB secara permanen
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: maestrobot-mongo
+spec:
+  selector:
+    app: maestrobot
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  clusterIP: None  # Menggunakan headless service agar dapat diakses melalui hostname

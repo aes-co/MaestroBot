@@ -1,62 +1,47 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 
-MONGO_URL = os.environ.get("MONGO_URL")
-mongo = AsyncIOMotorClient(MONGO_URL)
-db = mongo.maestrobot
+mongo_url = os.getenv("MONGO_URL")
+mongo_client = AsyncIOMotorClient(mongo_url)
+db = mongo_client.maestrobot
 
-# ===== QUEUE PER CHAT (untuk antrian lagu di setiap grup/channel) =====
-
-async def add_to_queue(chat_id: int, song: dict):
-    await db.queues.update_one(
-        {"chat_id": str(chat_id)},
-        {"$push": {"songs": song}},
-        upsert=True
-    )
+queue_cache = {}
 
 async def get_queue(chat_id: int):
-    doc = await db.queues.find_one({"chat_id": str(chat_id)})
-    return doc.get("songs", []) if doc and "songs" in doc else []
+    if chat_id in queue_cache:
+        return queue_cache[chat_id]
+    doc = await db.queues.find_one({"chat_id": chat_id})
+    queue = doc["songs"] if doc and "songs" in doc else []
+    queue_cache[chat_id] = queue
+    return queue
 
-async def pop_queue(chat_id: int):
-    doc = await db.queues.find_one({"chat_id": str(chat_id)})
-    if doc and "songs" in doc and doc["songs"]:
-        # Pop lagu terdepan
-        song = doc["songs"][0]
-        await db.queues.update_one(
-            {"chat_id": str(chat_id)},
-            {"$pop": {"songs": -1}}
-        )
-        return song
-    return None
-
-async def clear_queue(chat_id: int):
+async def add_to_queue(chat_id: int, song: dict):
+    queue = await get_queue(chat_id)
+    queue.append(song)
+    queue_cache[chat_id] = queue
     await db.queues.update_one(
-        {"chat_id": str(chat_id)},
-        {"$set": {"songs": []}}
-    )
-
-async def remove_from_queue(chat_id: int, index: int):
-    doc = await db.queues.find_one({"chat_id": str(chat_id)})
-    if not doc or "songs" not in doc or index < 0 or index >= len(doc["songs"]):
-        return False
-    songs = doc["songs"]
-    removed = songs.pop(index)
-    await db.queues.update_one(
-        {"chat_id": str(chat_id)},
-        {"$set": {"songs": songs}}
-    )
-    return removed
-
-# ===== PLAYBACK HISTORY UNTUK REKOMENDASI =====
-
-async def log_playback(chat_id: int, song: dict):
-    await db.group_playback_history.update_one(
-        {"chat_id": str(chat_id)},
-        {"$push": {"songs": song}},
+        {"chat_id": chat_id},
+        {"$set": {"songs": queue}},
         upsert=True
     )
 
-async def get_playback_history(chat_id: int, limit: int = 20):
-    doc = await db.group_playback_history.find_one({"chat_id": str(chat_id)})
-    return doc.get("songs", [])[-limit:] if doc and "songs" in doc else []
+async def pop_next_song(chat_id: int):
+    queue = await get_queue(chat_id)
+    if not queue:
+        return None
+    next_song = queue.pop(0)
+    queue_cache[chat_id] = queue
+    await db.queues.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"songs": queue}},
+        upsert=True
+    )
+    return next_song
+
+async def clear_queue(chat_id: int):
+    queue_cache.pop(chat_id, None)
+    await db.queues.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"songs": []}},
+        upsert=True
+    )

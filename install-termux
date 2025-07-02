@@ -1,0 +1,27 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+echo -e "\n📦 Memperbarui paket dan menginstal dependensi...\n"
+
+pkg update -y && pkg upgrade -y
+pkg install -y git python ffmpeg openssl libffi clang
+
+echo -e "\n🐍 Menyiapkan lingkungan virtual Python...\n"
+
+python -m venv venv
+source venv/bin/activate
+
+echo -e "\n⬇️ Mengkloning repositori MaestroBot...\n"
+
+git clone https://github.com/aes-co/maestrobot.git
+cd maestrobot
+
+echo -e "\n📦 Menginstal dependensi Python...\n"
+
+pip install --upgrade pip
+pip install -r requirements.txt
+
+echo -e "\n⚙️ Silakan buat file .env dan isi konfigurasi bot...\n"
+cp .env.example .env
+
+echo -e "\n✅ Instalasi selesai. Untuk menjalankan bot:\n"
+echo "source venv/bin/activate && python -m maestrobot"

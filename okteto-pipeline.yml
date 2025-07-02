@@ -1,6 +1,11 @@
 name: MaestroBot Pipeline
 
 deploy:
-  - okteto build -t maestro-bot:dev .
-  - kubectl apply -f k8s/deployment.yaml
-  - kubectl apply -f k8s/service.yaml
+  - name: Deploy MongoDB
+    command: |
+      kubectl apply -f k8s/mongo-deployment.yaml
+
+  - name: Build & Deploy MaestroBot
+    command: |
+      okteto build -t okteto.dev/maestrobot:latest .
+      kubectl apply -f k8s/bot-deployment.yaml

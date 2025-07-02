@@ -1,5 +1,14 @@
 greeting: "Hello! I'm MaestroBot."
-help: "Here are the available commands:\n/play - Play a song\n/queue - Show queue\n/skip - Skip song\n/playlist - Personal playlist\n/lyrics - Search lyrics\n/recommend - Song recommendations\n\nUse these commands in a group or private chat."
+help: |
+  Here are the available commands:
+  /play - Play a song
+  /queue - Show queue
+  /skip - Skip song
+  /playlist - Personal playlist
+  /lyrics - Search lyrics
+  /recommend - Song recommendations
+
+  Use these commands in a group or private chat.
 now_playing: "🎶 Now playing: <b>{title}</b>\n{url}"
 queue_empty: "Queue is empty."
 added_to_queue: "Added to queue: <b>{title}</b>"

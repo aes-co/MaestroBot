@@ -1,104 +1,130 @@
-from maestrobot.db.queues import (
-    add_to_queue,
-    get_queue,
-    pop_queue,
-    clear_queue,
-    log_playback
-)
-from maestrobot.db.settings import get_setting
-from maestrobot.media.downloader import download_audio
+from collections import defaultdict
+from maestrobot.player.voice_chat import join_or_get_group_call, leave_group_call
+from maestrobot.player.transcoder import transcode_audio, cleanup_transcoded
+from maestrobot.db.queues import get_queue, pop_queue, log_playback
+import asyncio
 
-# Fungsi utama untuk mengelola player/antrian VC
+active_players = {}
 
-async def play_song(chat_id: int, query: str, user_id: int = None):
-    """
-    Download lagu dan tambahkan ke antrian, otomatis play jika kosong.
-    """
-    # Download lagu
-    song = await download_audio(query)
-    # Masukkan ke queue
-    await add_to_queue(chat_id, song)
-    # Log history playback user (opsional)
-    if user_id:
-        await log_playback(user_id, song)
-    return song
+class Player:
+    def __init__(self, chat_id, group_call):
+        self.chat_id = chat_id
+        self.group_call = group_call
+        self.queue = []
+        self.now_playing = None
+        self.volume = 100
+        self.playing = False
+        self.task = None
 
-async def get_current_queue(chat_id: int):
-    """
-    Ambil antrian lagu saat ini untuk grup.
-    """
-    return await get_queue(chat_id)
+    async def load_queue(self):
+        self.queue = await get_queue(self.chat_id)
 
-async def skip_song(chat_id: int):
-    """
-    Hapus lagu terdepan dari antrian dan return lagu selanjutnya.
-    """
-    await pop_queue(chat_id)
-    queue = await get_queue(chat_id)
-    return queue[0] if queue else None
+    async def play_next(self):
+        if not self.queue:
+            self.playing = False
+            await leave_group_call(self.chat_id)
+            return
+        self.now_playing = await pop_queue(self.chat_id)
+        audio_path = await transcode_audio(self.now_playing["id"], self.chat_id)
+        if not audio_path:
+            return await self.play_next()
+        await self.group_call.start_playout(audio_path)
+        self.playing = True
+        await log_playback(self.chat_id, self.now_playing)
 
-async def clear_all_queue(chat_id: int):
-    """
-    Kosongkan seluruh antrian lagu grup.
-    """
-    await clear_queue(chat_id)
+    async def start(self):
+        if self.playing:
+            return
+        await self.load_queue()
+        if not self.queue:
+            return
+        await self.play_next()
 
-async def now_playing(chat_id: int):
-    """
-    Info lagu yang sedang diputar.
-    """
-    queue = await get_queue(chat_id)
-    return queue[0] if queue else None
+    async def skip(self):
+        await self.group_call.stop_playout()
+        await self.play_next()
 
-# Handler Telegram (bisa dipisah ke handlers/player_commands.py)
-from telegram import Update
-from telegram.ext import CommandHandler, CallbackContext
+    async def stop(self):
+        await self.group_call.stop_playout()
+        self.queue = []
+        self.now_playing = None
+        self.playing = False
+        await leave_group_call(self.chat_id)
+        cleanup_transcoded(self.chat_id)
 
-async def play_command(update: Update, context: CallbackContext):
-    chat_id = update.effective_chat.id
-    user_id = update.effective_user.id
-    if not context.args:
-        await update.message.reply_text("Kirim: /play <judul/link lagu>")
-        return
-    query = " ".join(context.args)
-    song = await play_song(chat_id, query, user_id)
-    await update.message.reply_text(f"▶️ Ditambahkan: <b>{song['title']}</b>\n{song.get('webpage_url','')}", parse_mode="HTML")
+    async def pause(self):
+        await self.group_call.pause_playout()
 
-async def queue_command(update: Update, context: CallbackContext):
-    chat_id = update.effective_chat.id
-    queue = await get_current_queue(chat_id)
-    if not queue:
-        await update.message.reply_text("📭 Antrian kosong.")
-        return
-    text = "⏯ <b>Antrian:</b>\n"
-    for idx, song in enumerate(queue, 1):
-        text += f"{idx}. <b>{song['title']}</b> — <i>{song.get('uploader','')}</i>\n"
-    await update.message.reply_text(text, parse_mode="HTML")
+    async def resume(self):
+        await self.group_call.resume_playout()
 
-async def skip_command(update: Update, context: CallbackContext):
-    chat_id = update.effective_chat.id
-    next_song = await skip_song(chat_id)
-    if next_song:
-        await update.message.reply_text(f"⏭️ Lewat! Sekarang memutar: <b>{next_song['title']}</b>", parse_mode="HTML")
-    else:
-        await update.message.reply_text("Antrian habis.")
+    async def set_volume(self, vol):
+        self.volume = vol
+        await self.group_call.set_volume(vol)
 
-async def clear_command(update: Update, context: CallbackContext):
-    chat_id = update.effective_chat.id
-    await clear_all_queue(chat_id)
-    await update.message.reply_text("🗑️ Antrian dikosongkan.")
+async def get_player(chat_id: int):
+    if chat_id in active_players:
+        return active_players[chat_id]
+    group_call = await join_or_get_group_call(chat_id)
+    player = Player(chat_id, group_call)
+    active_players[chat_id] = player
+    return player
 
-async def nowplaying_command(update: Update, context: CallbackContext):
-    chat_id = update.effective_chat.id
-    song = await now_playing(chat_id)
-    if song:
-        await update.message.reply_text(f"🎶 Sekarang diputar: <b>{song['title']}</b>\n{song.get('webpage_url','')}", parse_mode="HTML")
-    else:
-        await update.message.reply_text("Tidak ada lagu yang sedang diputar.")
+async def add_to_queue(chat_id: int, song: dict):
+    player = await get_player(chat_id)
+    player.queue.append(song)
+    if not player.playing:
+        await player.start()
 
-def setup(dispatcher):
-    dispatcher.add_handler(CommandHandler("play", play_command))
-    dispatcher.add_handler(CommandHandler("queue", queue_command))
-    dispatcher.add_handler(CommandHandler("skip", skip_command))
-    dispatcher.add_handler(CommandHandler("clear", clear_command))
-    dispatcher.add_handler(CommandHandler("nowplaying", nowplaying_command))
+async def get_now_playing(chat_id: int):
+    player = active_players.get(chat_id)
+    return player.now_playing if player else None
+
+async def pause(chat_id: int):
+    player = active_players.get(chat_id)
+    if player:
+        await player.pause()
+
+async def resume(chat_id: int):
+    player = active_players.get(chat_id)
+    if player:
+        await player.resume()
+
+async def skip(chat_id: int):
+    player = active_players.get(chat_id)
+    if player:
+        await player.skip()
+
+async def stop(chat_id: int):
+    player = active_players.get(chat_id)
+    if player:
+        await player.stop()
+        active_players.pop(chat_id, None)
+
+async def set_volume(chat_id: int, vol: int):
+    player = active_players.get(chat_id)
+    if player:
+        await player.set_volume(vol)
+
+async def get_global_status():
+    text = ""
+    for chat_id, player in active_players.items():
+        if player.now_playing:
+            title = player.now_playing["title"]
+            text += f"\n<b>{chat_id}</b>: 🎶 {title}"
+    return text or "Tidak ada pemutaran aktif."
+
+async def mute_voice_chat(chat_id: int):
+    player = active_players.get(chat_id)
+    if player:
+        await player.group_call.set_is_muted(True)
+
+async def unmute_voice_chat(chat_id: int):
+    player = active_players.get(chat_id)
+    if player:
+        await player.group_call.set_is_muted(False)
+
+async def kick_from_voice_chat(chat_id: int, user_id: int):
+    player = active_players.get(chat_id)
+    if player:
+        await player.group_call.kick_user(user_id)

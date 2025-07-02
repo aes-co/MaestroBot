@@ -1,5 +1,14 @@
 greeting: "Halo! Saya MaestroBot."
-help: "Berikut adalah daftar perintah:\n/play - Putar lagu\n/queue - Lihat antrian\n/skip - Lewati lagu\n/playlist - Playlist pribadi\n/lyrics - Cari lirik\n/recommend - Rekomendasi lagu\n\nGunakan perintah di atas di grup atau private chat."
+help: |
+  Berikut adalah daftar perintah:
+  /play - Putar lagu
+  /queue - Lihat antrian
+  /skip - Lewati lagu
+  /playlist - Playlist pribadi
+  /lyrics - Cari lirik
+  /recommend - Rekomendasi lagu
+
+  Gunakan perintah di atas di grup atau private chat.
 now_playing: "🎶 Sekarang diputar: <b>{title}</b>\n{url}"
 queue_empty: "Antrian kosong."
 added_to_queue: "Ditambahkan ke antrian: <b>{title}</b>"

@@ -1,33 +1,31 @@
 from telegram import Update
-from telegram.ext import CommandHandler, CallbackContext
+from telegram.ext import CommandHandler, ContextTypes
 from maestrobot.player.player_manager import (
     mute_voice_chat,
     unmute_voice_chat,
     kick_from_voice_chat,
 )
-from maestrobot.db.settings import add_sudo_user, remove_sudo_user, get_sudo_users
+from maestrobot.db.settings import (
+    add_sudo_user,
+    remove_sudo_user,
+    get_sudo_users,
+)
 from maestrobot.configs import OWNER_ID
 
-def is_owner_or_sudo(user_id):
-    sudo_users = []
-    try:
-        # get_sudo_users is async, but this will be awaited in handler
-        sudo_users = get_sudo_users()
-    except Exception:
-        pass
-    return user_id == int(OWNER_ID) or user_id in sudo_users
 
-async def mute_command(update: Update, context: CallbackContext):
+async def mutevc_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     await mute_voice_chat(chat_id)
     await update.message.reply_text("🔇 Semua peserta VC dimute.")
 
-async def unmute_command(update: Update, context: CallbackContext):
+
+async def unmutevc_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     await unmute_voice_chat(chat_id)
     await update.message.reply_text("🔊 Semua peserta VC diunmute.")
 
-async def kickvc_command(update: Update, context: CallbackContext):
+
+async def kickvc_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args or not context.args[0].isdigit():
         await update.message.reply_text("Kirim: /kickvc <user_id>")
         return
@@ -36,7 +34,8 @@ async def kickvc_command(update: Update, context: CallbackContext):
     await kick_from_voice_chat(chat_id, user_id)
     await update.message.reply_text(f"🚫 User {user_id} dikeluarkan dari VC.")
 
-async def sudo_add_command(update: Update, context: CallbackContext):
+
+async def addsudo_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args or not context.args[0].isdigit():
         await update.message.reply_text("Kirim: /addsudo <user_id>")
         return
@@ -44,7 +43,8 @@ async def sudo_add_command(update: Update, context: CallbackContext):
     await add_sudo_user(user_id)
     await update.message.reply_text(f"✅ User {user_id} ditambahkan sebagai sudo.")
 
-async def sudo_remove_command(update: Update, context: CallbackContext):
+
+async def delsudo_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args or not context.args[0].isdigit():
         await update.message.reply_text("Kirim: /delsudo <user_id>")
         return
@@ -52,7 +52,8 @@ async def sudo_remove_command(update: Update, context: CallbackContext):
     await remove_sudo_user(user_id)
     await update.message.reply_text(f"❌ User {user_id} dihapus dari sudo.")
 
-async def sudo_list_command(update: Update, context: CallbackContext):
+
+async def sudolist_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sudos = await get_sudo_users()
     if not sudos:
         await update.message.reply_text("Belum ada sudo user.")
@@ -62,10 +63,12 @@ async def sudo_list_command(update: Update, context: CallbackContext):
         text += f"- <code>{uid}</code>\n"
     await update.message.reply_text(text, parse_mode="HTML")
 
-def setup(dispatcher):
-    dispatcher.add_handler(CommandHandler("mutevc", mute_command))
-    dispatcher.add_handler(CommandHandler("unmutevc", unmute_command))
-    dispatcher.add_handler(CommandHandler("kickvc", kickvc_command))
-    dispatcher.add_handler(CommandHandler("addsudo", sudo_add_command))
-    dispatcher.add_handler(CommandHandler("delsudo", sudo_remove_command))
-    dispatcher.add_handler(CommandHandler("sudolist", sudo_list_command))
+
+handlers = [
+    CommandHandler("mutevc", mutevc_command),
+    CommandHandler("unmutevc", unmutevc_command),
+    CommandHandler("kickvc", kickvc_command),
+    CommandHandler("addsudo", addsudo_command),
+    CommandHandler("delsudo", delsudo_command),
+    CommandHandler("sudolist", sudolist_command),
+]

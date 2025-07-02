@@ -1,10 +1,8 @@
 from telegram.ext import MessageFilter
+from maestrobot.configs import OWNER_ID
 
 class IsOwnerFilter(MessageFilter):
-    def __init__(self, owner_id):
-        self.owner_id = owner_id
-
     def filter(self, message):
-        return message.from_user.id == self.owner_id
+        return message.from_user and message.from_user.id == int(OWNER_ID)
 
-is_owner = IsOwnerFilter
+is_owner = IsOwnerFilter()

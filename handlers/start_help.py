@@ -1,9 +1,9 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ContextTypes, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler
 from maestrobot.configs import CREATOR_CHANNEL_LINK, DONATION_LINK
 
 START_TEXT = (
-    "🎧 <b>Welcome to MaestroBot!</b>\n\n"
+    "🎷 <b>Welcome to MaestroBot!</b>\n\n"
     "Hai {mention} 👋, siap putar musik berkualitas di grup kamu?\n"
     "Aku bisa temenin kamu dengerin lagu, karaokean, sampai atur antrian musik di voice chat Telegram!\n\n"
     "🔹 <b>Fitur utama:</b>\n"
@@ -36,12 +36,10 @@ HELP_TEXT = (
 )
 
 def get_buttons():
-    buttons = [
-        [
-            InlineKeyboardButton("🎶 Mulai Putar Musik", switch_inline_query_current_chat=""),
-            InlineKeyboardButton("ℹ️ Bantuan", callback_data="help_menu"),
-        ]
-    ]
+    buttons = [[
+        InlineKeyboardButton("🎶 Mulai Putar Musik", switch_inline_query_current_chat=""),
+        InlineKeyboardButton("ℹ️ Bantuan", callback_data="open_help")
+    ]]
     row2 = []
     if CREATOR_CHANNEL_LINK:
         row2.append(InlineKeyboardButton("👾 Channel Creator", url=CREATOR_CHANNEL_LINK))
@@ -49,16 +47,13 @@ def get_buttons():
         row2.append(InlineKeyboardButton("💖 Donasi", url=DONATION_LINK))
     if row2:
         buttons.append(row2)
-    return buttons
+    return InlineKeyboardMarkup(buttons)
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
-    text = START_TEXT.format(
-        mention=user.mention_html()
-    )
     await update.message.reply_text(
-        text,
-        reply_markup=InlineKeyboardMarkup(get_buttons()),
+        START_TEXT.format(mention=user.mention_html()),
+        reply_markup=get_buttons(),
         parse_mode="HTML"
     )
 
@@ -71,6 +66,25 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode="HTML"
     )
 
-def register(app):
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help_command))
+async def start_help_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    data = query.data
+
+    if data == "open_help":
+        await query.answer()
+        await query.message.edit_text(HELP_TEXT, parse_mode="HTML")
+
+    elif data == "start_menu":
+        user = update.effective_user
+        await query.answer()
+        await query.message.edit_text(
+            START_TEXT.format(mention=user.mention_html()),
+            reply_markup=get_buttons(),
+            parse_mode="HTML"
+        )
+
+handlers = [
+    CommandHandler("start", start_command),
+    CommandHandler("help", help_command),
+    CallbackQueryHandler(start_help_callback, pattern="^(open_help|start_menu)$")
+]

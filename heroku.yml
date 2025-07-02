@@ -1,5 +1,15 @@
 build:
   docker:
     web: Dockerfile
+
 run:
   web: python -m maestrobot
+
+env:
+  BOT_TOKEN: ${BOT_TOKEN}
+  MONGO_URL: ${MONGO_URL}
+  API_ID: ${API_ID}
+  API_HASH: ${API_HASH}
+  SESSION_STRING: ${SESSION_STRING}
+  OWNER_ID: ${OWNER_ID}
+  SUDO_USERS: ${SUDO_USERS}

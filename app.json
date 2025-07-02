@@ -1,41 +1,43 @@
 {
   "name": "MaestroBot",
-  "description": "A modular Telegram music bot with playlist, queue, and web dashboard.",
-  "repository": "https://github.com/yourusername/MaestroBot",
-  "keywords": [
-    "telegram",
-    "bot",
-    "music",
-    "python",
-    "mongodb"
-  ],
+  "description": "🎧 Modular Telegram Music Bot with Hybrid Engine and WebApp Dashboard",
+  "repository": "https://github.com/aeswnh/maestrobot",
+  "keywords": ["telegram", "music", "bot", "pyrogram", "fastapi", "webapp"],
   "env": {
     "BOT_TOKEN": {
-      "description": "Telegram bot token",
-      "required": true
-    },
-    "MONGO_URL": {
-      "description": "MongoDB connection string",
+      "description": "Token dari BotFather",
       "required": true
     },
     "API_ID": {
-      "description": "Telegram API ID (for userbot)",
-      "required": false
+      "description": "API ID dari https://my.telegram.org",
+      "required": true
     },
     "API_HASH": {
-      "description": "Telegram API hash (for userbot)",
-      "required": false
+      "description": "API HASH dari https://my.telegram.org",
+      "required": true
     },
     "SESSION_STRING": {
-      "description": "Pyrogram session string (for userbot)",
-      "required": false
+      "description": "Pyrogram session string untuk userbot",
+      "required": true
+    },
+    "MONGO_URI": {
+      "description": "MongoDB URI (misal dari Atlas)",
+      "required": true
+    },
+    "REDIS_URI": {
+      "description": "Redis URI (misal: redis://localhost:6379/0)",
+      "required": true
     },
     "OWNER_ID": {
-      "description": "Telegram user ID of the owner",
+      "description": "Telegram user ID owner bot",
       "required": true
     },
     "SUDO_USERS": {
-      "description": "Comma separated Telegram user IDs for sudo access",
+      "description": "Daftar user ID admin tambahan (pisahkan dengan spasi)",
+      "required": false
+    },
+    "LANG": {
+      "description": "Bahasa default bot (en/id)",
       "required": false
     }
   },
@@ -50,7 +52,8 @@
       "size": "free"
     }
   },
-  "addons": [
-    "mongolab"
-  ]
+  "scripts": {
+    "postdeploy": "echo 🎉 MaestroBot deployed! Jangan lupa cek log dan konfigurasi."
+  },
+  "addons": ["heroku-redis"]
 }

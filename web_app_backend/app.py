@@ -1,14 +1,18 @@
-from flask import Flask
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from web_app_backend.routes import router
 
-def create_app():
-    app = Flask(__name__)
+app = FastAPI(
+    title="MaestroBot WebApp API",
+    description="Backend for MaestroBot Web Interface",
+    version="1.0.0"
+)
 
-    @app.route("/")
-    def home():
-        return "MaestroBot WebApp Backend"
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    return app
-
-if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
+app.include_router(router)

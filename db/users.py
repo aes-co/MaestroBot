@@ -1,27 +1,24 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 
-MONGO_URL = os.environ.get("MONGO_URL")
-mongo = AsyncIOMotorClient(MONGO_URL)
-db = mongo.maestrobot
-
-async def add_user(user_id: int, data: dict = None):
-    data = data or {}
-    await db.users.update_one(
-        {"user_id": user_id},
-        {"$setOnInsert": {"user_id": user_id, **data}},
-        upsert=True
-    )
+mongo_url = os.getenv("MONGO_URL")
+mongo_client = AsyncIOMotorClient(mongo_url)
+db = mongo_client.maestrobot
 
 async def get_user(user_id: int):
-    return await db.users.find_one({"user_id": user_id})
+    doc = await db.users.find_one({"user_id": user_id})
+    return doc if doc else {}
 
-async def update_user(user_id: int, update_data: dict):
+async def add_or_update_user(user: dict):
     await db.users.update_one(
-        {"user_id": user_id},
-        {"$set": update_data},
+        {"user_id": user["user_id"]},
+        {"$set": user},
         upsert=True
     )
 
+async def get_total_users():
+    return await db.users.count_documents({})
+
 async def get_all_users():
-    return [u async for u in db.users.find({})]
+    cursor = db.users.find()
+    return [user async for user in cursor]

@@ -42,7 +42,7 @@
   * **Music Recommendation Engine**: Get personalized song suggestions based on playback history.
   * **User-selectable Audio Quality**: Choose your preferred audio quality (low, medium, high) to save data or enjoy pristine sound.
   * **Global/Shared Queue Synchronization**: Create and manage synchronized music queues across multiple groups or users.
-  * **Creator Support Button**: A dedicated button for users to show appreciation and support the bot's creator (you\!).
+  * **Creator Support Button**: A dedicated button for users to show appreciation and support the bot's creator (you!).
   * **Mandatory Channel Membership**: Ensure users join your Telegram channel before using the bot, fostering community growth.
   * **Interactive Bot Settings (`/bs`, `/bset`, `/botsetting`)**: Manage bot configurations (like adding sudo users) through an intuitive, **menu-driven interface** directly in Telegram.
   * **Monitoring & Control Commands**: Essential commands like `/restart`, `/ping`, `/speedtest`, and `/status` for easy bot management and health checks.
@@ -111,18 +111,18 @@ Get the [Necessary Variables](#-necessary-variables) and then click the button b
 
 This is the recommended method for stable, production-grade deployments.
 
-1.  **Install Docker & Docker Compose**: Follow official Docker documentation for your VPS OS.
-2.  **Clone the repository**:
+1. **Install Docker & Docker Compose**: Follow official Docker documentation for your VPS OS.
+2. **Clone the repository**:
     ```bash
     git clone https://github.com/aes-co/MaestroBot.git
     cd MaestroBot
     ```
-3.  **Create `.env` file**: Copy `.env.sample` to `.env` and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
+3. **Create `.env` file**: Copy `.env.sample` to `.env` and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
     ```bash
     cp .env.sample .env
     # Edit .env file with your variables
     ```
-4.  **Build and run with Docker Compose**:
+4. **Build and run with Docker Compose**:
     ```bash
     docker-compose up --build -d
     ```
@@ -132,18 +132,18 @@ This is the recommended method for stable, production-grade deployments.
 
 Ideal for development and testing. Docker Compose is highly recommended.
 
-1.  **Install Docker & Docker Compose**: Follow official Docker documentation.
-2.  **Clone the repository**:
+1. **Install Docker & Docker Compose**: Follow official Docker documentation.
+2. **Clone the repository**:
     ```bash
     git clone https://github.com/aes-co/MaestroBot.git
     cd MaestroBot
     ```
-3.  **Create `.env` file**: Copy `.env.sample` to `.env` and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
+3. **Create `.env` file**: Copy `.env.sample` to `.env` and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
     ```bash
     cp .env.sample .env
     # Edit .env file with your variables
     ```
-4.  **Run with Docker Compose**:
+4. **Run with Docker Compose**:
     ```bash
     docker-compose up --build
     ```
@@ -153,28 +153,28 @@ Ideal for development and testing. Docker Compose is highly recommended.
 
 Suitable for light personal use and testing on Android. External DB/Cache is highly recommended.
 
-1.  **Install Termux**: Download from F-Droid.
-2.  **Update packages and install Python & Git**:
+1. **Install Termux**: Download from F-Droid.
+2. **Update packages and install Python & Git**:
     ```bash
     pkg update && pkg upgrade
     pkg install python git ffmpeg
     ```
-3.  **Clone the repository**:
+3. **Clone the repository**:
     ```bash
     git clone https://github.com/aes-co/MaestroBot.git
     cd MaestroBot
     ```
-4.  **Create a virtual environment (optional but recommended)**:
+4. **Create a virtual environment (optional but recommended)**:
     ```bash
     python -m venv venv
     source venv/bin/activate
     ```
-5.  **Install Python requirements**:
+5. **Install Python requirements**:
     ```bash
     pip install -r requirements.txt
     ```
-6.  **Create `.env` file**: Manually create a `.env` file and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables). Use cloud-hosted MongoDB/Redis.
-7.  **Run the bot (simplified for Termux)**: You might need to run individual services or a combined script.
+6. **Create `.env` file**: Manually create a `.env` file and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables). Use cloud-hosted MongoDB/Redis.
+7. **Run the bot (simplified for Termux)**: You might need to run individual services or a combined script.
     ```bash
     # Example for Core Bot (assuming it's the main entry point)
     python -m maestrobot.__main__
@@ -185,18 +185,17 @@ Suitable for light personal use and testing on Android. External DB/Cache is hig
 
 Good for quick demos and small-scale usage. External DB/Cache is mandatory.
 
-1.  **Create a new Repl**: Select Python as the language.
-2.  **Clone the repository**: Use the Replit shell to `git clone https://github.com/aes-co/MaestroBot.git .` (note the dot for current directory).
-3.  **Install FFmpeg**: Add `apt-get update && apt-get install -y ffmpeg` to your `.replit` file's `run` command or a setup script.
-4.  **Install Python requirements**: `pip install -r requirements.txt` in the shell.
-5.  **Set Environment Variables**: Use Replit's "Secrets" tab to add all your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
-6.  **Run the bot**: Configure the `run` command in `.replit` to start your main bot script (e.g., `python -m maestrobot.__main__`). You might need to use a web server (like Flask/FastAPI) to keep the Repl "Always On".
+1. **Create a new Repl**: Select Python as the language.
+2. **Clone the repository**: Use the Replit shell to `git clone https://github.com/aes-co/MaestroBot.git .` (note the dot for current directory).
+3. **Install FFmpeg**: Add `apt-get update && apt-get install -y ffmpeg` to your `.replit` file's `run` command or a setup script.
+4. **Install Python requirements**: `pip install -r requirements.txt` in the shell.
+5. **Set Environment Variables**: Use Replit's "Secrets" tab to add all your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
+6. **Run the bot**: Configure the `run` command in `.replit` to start your main bot script (e.g., `python -m maestrobot.__main__`). You might need to use a web server (like Flask/FastAPI) to keep the Repl "Always On".
 
 -----
 
 ## 📂 Project Structure
 
-```
 .
 ├── app.json
 ├── CODE_OF_CONDUCT.md
@@ -211,69 +210,69 @@ Good for quick demos and small-scale usage. External DB/Cache is mandatory.
 ├── README.md
 ├── requirements.txt
 ├── maestrobot/
-│   ├── __init__.py
-│   ├── __main__.py                   # Main entry point for the bot application
-│   ├── configs.py                    # Handles loading and accessing environment variables
-│   ├── db/                           # Database models and interaction logic (MongoDB)
-│   │   ├── __init__.py
-│   │   ├── users.py                  # User profiles, channel membership status
-│   │   ├── settings.py               # Bot-wide and group-specific settings, sudo users
-│   │   ├── queues.py                 # Music queues (per group and shared/global)
-│   │   └── playback_history.py       # Stores song playback history for recommendations
-│   ├── handlers/                     # Core bot command and callback handlers (python-telegram-bot)
-│   │   ├── __init__.py
-│   │   ├── start_help.py             # /start, /help commands
-│   │   ├── music_commands.py         # /play, /queue, /nowplaying
-│   │   ├── admin_commands.py         # Moderation, promote/demote (e.g., /mute, /kick)
-│   │   ├── settings_commands.py      # /bs, /bset, /botsetting menu interactions
-│   │   └── utility_commands.py       # /id, /userinfo, /linkchannel, /support, /donate
-│   ├── assistant/                    # Userbot core logic and orchestration (Pyrogram)
-│   │   ├── __init__.py
-│   │   ├── client.py                 # Pyrogram client setup
-│   │   ├── orchestrator.py           # Manages the userbot pool, assigns tasks, handles status
-│   │   ├── voice_chat.py             # PyTgCalls integration for audio streaming in voice chats
-│   │   └── userbot_handlers.py       # Userbot-specific event handlers (e.g., voice chat join/leave)
-│   ├── plugins/                      # Modular features, similar to a plugin system
-│   │   ├── __init__.py
-│   │   ├── music_controls.py         # Handles inline button actions for playback control
-│   │   ├── lyrics.py                 # Lyrics search integration
-│   │   ├── recommendations.py        # Music recommendation logic and commands
-│   │   ├── shared_queue.py           # Commands and logic for global/shared queues
-│   │   ├── moderation_vc.py          # Voice chat specific moderation commands
-│   │   ├── monitoring.py             # /ping, /speedtest, /status commands
-│   │   └── restart.py                # /restart command handler
-│   ├── media/                        # Media processing and downloading
-│   │   ├── __init__.py
-│   │   ├── downloader.py             # Integrates with yt-dlp for media fetching
-│   │   └── transcoder.py             # Uses FFmpeg for audio quality conversion and formatting
-│   ├── utils/                        # General utility functions and helpers
-│   │   ├── __init__.py
-│   │   ├── helpers.py                # Generic helper functions, decorators
-│   │   ├── filters.py                # Custom python-telegram-bot filters
-│   │   └── web_app.py                # Utilities for Telegram Web App integration
-│   ├── web_app_backend/              # Backend service for the Telegram Mini App
-│   │   ├── __init__.py
-│   │   ├── app.py                    # Main FastAPI/Flask application for the Web App API
-│   │   └── routes.py                 # Defines API endpoints for the Web App frontend
-│   ├── startup/                      # Scripts for initial application setup and client connections
-│   │   ├── __init__.py
-│   │   ├── bot_client.py             # Initializes the python-telegram-bot client
-│   │   ├── userbot_clients.py        # Initializes Pyrogram clients for the userbot pool
-│   │   └── db_connections.py         # Handles connections to MongoDB and Redis
-│   └── strings/                      # Localization files for multi-language support
-│       ├── __init__.py
-│       ├── en.yml                    # English language strings
-│       ├── id.yml                    # Indonesian language strings
-│       └── ... (other languages)
-├── resources/                        # Static assets like logos, fonts, etc.
-│   ├── logo.png                      # Main logo for the bot
-│   ├── extras/                       # Additional images or markdown files (e.g., tutorials)
-│   │   └── mona-whisper.gif          # The cat logo
-│   └── fonts/                        # Custom fonts for image generation (if applicable)
-└── scripts/                          # Helper scripts for deployment or session generation
-    ├── session_generator.py          # Script to generate Pyrogram session strings
-    └── setup.sh                      # General setup script for local/Termux deployments
-```
+│ ├── init.py
+│ ├── main.py # Main entry point for the bot application
+│ ├── configs.py # Handles loading and accessing environment variables
+│ ├── db/ # Database models and interaction logic (MongoDB)
+│ │ ├── init.py
+│ │ ├── users.py # User profiles, channel membership status
+│ │ ├── settings.py # Bot-wide and group-specific settings, sudo users
+│ │ ├── queues.py # Music queues (per group and shared/global)
+│ │ └── playback_history.py # Stores song playback history for recommendations
+│ ├── handlers/ # Core bot command and callback handlers (python-telegram-bot)
+│ │ ├── init.py
+│ │ ├── start_help.py # /start, /help commands
+│ │ ├── music_commands.py # /play, /queue, /nowplaying
+│ │ ├── admin_commands.py # Moderation, promote/demote (e.g., /mute, /kick)
+│ │ ├── settings_commands.py # /bs, /bset, /botsetting menu interactions
+│ │ └── utility_commands.py # /id, /userinfo, /linkchannel, /support, /donate
+│ ├── assistant/ # Userbot core logic and orchestration (Pyrogram)
+│ │ ├── init.py
+│ │ ├── client.py # Pyrogram client setup
+│ │ ├── orchestrator.py # Manages the userbot pool, assigns tasks, handles status
+│ │ ├── voice_chat.py # PyTgCalls integration for audio streaming in voice chats
+│ │ └── userbot_handlers.py # Userbot-specific event handlers (e.g., voice chat join/leave)
+│ ├── plugins/ # Modular features, similar to a plugin system
+│ │ ├── init.py
+│ │ ├── music_controls.py # Handles inline button actions for playback control
+│ │ ├── lyrics.py # Lyrics search integration
+│ │ ├── recommendations.py # Music recommendation logic and commands
+│ │ ├── shared_queue.py # Commands and logic for global/shared queues
+│ │ ├── moderation_vc.py # Voice chat specific moderation commands
+│ │ ├── monitoring.py # /ping, /speedtest, /status commands
+│ │ └── restart.py # /restart command handler
+│ ├── media/ # Media processing and downloading
+│ │ ├── init.py
+│ │ ├── downloader.py # Integrates with yt-dlp for media fetching
+│ │ └── transcoder.py # Uses FFmpeg for audio quality conversion and formatting
+│ ├── utils/ # General utility functions and helpers
+│ │ ├── init.py
+│ │ ├── helpers.py # Generic helper functions, decorators
+│ │ ├── filters.py # Custom python-telegram-bot filters
+│ │ └── web_app.py # Utilities for Telegram Web App integration
+│ ├── web_app_backend/ # Backend service for the Telegram Mini App
+│ │ ├── init.py
+│ │ ├── app.py # Main FastAPI/Flask application for the Web App API
+│ │ └── routes.py # Defines API endpoints for the Web App frontend
+│ ├── startup/ # Scripts for initial application setup and client connections
+│ │ ├── init.py
+│ │ ├── bot_client.py # Initializes the python-telegram-bot client
+│ │ ├── userbot_clients.py # Initializes Pyrogram clients for the userbot pool
+│ │ └── db_connections.py # Handles connections to MongoDB and Redis
+│ └── strings/ # Localization files for multi-language support
+│ ├── init.py
+│ ├── en.yml # English language strings
+│ ├── id.yml # Indonesian language strings
+│ └── ... (other languages)
+├── resources/ # Static assets like logos, fonts, etc.
+│ ├── logo.png # Main logo for the bot
+│ ├── extras/ # Additional images or markdown files (e.g., tutorials)
+│ │ └── mona-whisper.gif # The cat logo
+│ └── fonts/ # Custom fonts for image generation (if applicable)
+└── scripts/ # Helper scripts for deployment or session generation
+├── session_generator.py # Script to generate Pyrogram session strings
+└── setup.sh # General setup script for local/Termux deployments
+
 
 -----
 
