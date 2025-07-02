@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  <i>A blazing-fast, feature-rich, and highly modular Telegram bot designed for seamless music playback in voice chats, built for everyone.</i>
+  <i>A blazing-fast, feature-rich, and highly modular Telegram bot for seamless music playback in voice chats, designed for everyone.</i>
 </p>
 
 <p align="center">
@@ -23,69 +23,72 @@
 
 ---
 
-## 🎶 **Overview**
+## 🎶 Overview
 
-**MaestroBot** is an advanced, open-source Telegram music bot built with a robust **modular architecture**. It's designed to provide a rich and interactive music experience in Telegram voice chats, supporting both groups and channels. With its **hybrid library approach** (Pyrogram for userbots/voice calls and python-telegram-bot for core bot interactions), MaestroBot offers unparalleled stability, speed, and a wide array of features for all users.
+**MaestroBot** is an advanced, open-source Telegram music bot built with a robust **modular architecture**. It provides a rich and interactive music experience in Telegram voice chats for both groups and channels. Leveraging a **hybrid library approach** (Pyrogram for userbots/voice calls and PTB for core bot interactions), MaestroBot delivers outstanding stability, speed, and a comprehensive feature set.
 
 > Modular, hybrid Telegram music bot for voice chats — powered by Pyrogram + PTB, with a web app and multi-deploy support.
 
------
+---
 
 ## ✨ Key Features
 
-  * **Real-time Music Playback**: Seamlessly stream audio in Telegram Voice Chats with **real-time "Now Playing" updates** and progress bars.
-  * **Interactive Controls**: Full control over playback with inline buttons: `⏪ Rewind`, `⏹️ Stop`, `⏯️ Pause/Resume`, `⏩ Forward`, `⏭️ Skip`, `📜 Lyrics`, and `☰ Menu`.
-  * **Automatic Lyrics Search**: Get lyrics for the currently playing song instantly.
-  * **Voice Chat Moderation**: Admin commands to mute, unmute, or kick users from voice chats.
-  * **Telegram Web App (Mini App)**: A rich, interactive web interface for managing queues, searching music, and controlling playback.
-  * **Channel Support**: Deploy and use the bot directly in Telegram Channels.
-  * **Music Recommendation Engine**: Get personalized song suggestions based on playback history.
-  * **User-selectable Audio Quality**: Choose your preferred audio quality (low, medium, high) to save data or enjoy pristine sound.
-  * **Global/Shared Queue Synchronization**: Create and manage synchronized music queues across multiple groups or users.
-  * **Creator Support Button**: A dedicated button for users to show appreciation and support the bot's creator (you!).
-  * **Mandatory Channel Membership**: Ensure users join your Telegram channel before using the bot, fostering community growth.
-  * **Interactive Bot Settings (`/bs`, `/bset`, `/botsetting`)**: Manage bot configurations (like adding sudo users) through an intuitive, **menu-driven interface** directly in Telegram.
-  * **Monitoring & Control Commands**: Essential commands like `/restart`, `/ping`, `/speedtest`, and `/status` for easy bot management and health checks.
+- **Real-time Music Playback**: Stream audio in voice chats with "Now Playing" and progress bar.
+- **Interactive Controls**: Playback control with inline buttons: ⏪ Rewind, ⏹️ Stop, ⏯️ Pause/Resume, ⏩ Forward, ⏭️ Skip, 📜 Lyrics, ☰ Menu.
+- **Automatic Lyrics Search**: Instantly fetch lyrics for the current song.
+- **Voice Chat Moderation**: Admin commands for muting/unmuting/kicking users.
+- **Telegram Web App (Mini App)**: Manage queues and music via a modern web interface.
+- **Channel Support**: Deploy and use directly in Telegram Channels.
+- **Music Recommendation Engine**: Personalized suggestions based on playback history.
+- **User-selectable Audio Quality**: Choose audio quality (low, medium, high).
+- **Global/Shared Queue Sync**: Synchronized queues across groups/users.
+- **Creator Support Button**: Dedicated button for user support.
+- **Mandatory Channel Membership**: Require users to join your channel before using the bot.
+- **Interactive Bot Settings**: Manage config (e.g., sudo users) with a Telegram menu.
+- **Monitoring & Control**: `/restart`, `/ping`, `/speedtest`, `/status` commands for bot management.
 
------
+---
 
-## 🚀 Supported Deployment Methods
+## 🚀 Deployment Methods
 
-MaestroBot is designed for maximum flexibility and can be deployed on various platforms:
+MaestroBot can be deployed on several platforms, including:
 
-  * [Heroku](https://www.google.com/search?q=%23deploy-to-heroku)
-  * [Okteto](https://www.google.com/search?q=%23deploy-to-okteto)
-  * [VPS (Docker Recommended)](https://www.google.com/search?q=%23deploy-to-vps)
-  * [Local Machine (Docker Recommended)](https://www.google.com/search?q=%23deploy-locally)
-  * [Termux](https://www.google.com/search?q=%23deploy-to-termux)
-  * [Replit](https://www.google.com/search?q=%23deploy-to-replit)
+- [Heroku](#deploy-to-heroku)
+- [Okteto](#deploy-to-okteto)
+- [VPS (Docker Recommended)](#deploy-to-vps-docker)
+- [Local Machine (Docker Recommended)](#deploy-locally)
+- [Termux](#deploy-to-termux)
+- [Replit](#deploy-to-replit)
 
------
+---
 
-## 🔧 Necessary Variables
+## 🔧 Environment Variables
 
-To run MaestroBot, you'll need to set up several environment variables. These are crucial for the bot's functionality and security.
+Set these variables for proper bot operation:
 
-  * `API_ID` - Your Telegram API ID. Get it from [my.telegram.org](https://my.telegram.org/).
-  * `API_HASH` - Your Telegram API Hash. Get it from [my.telegram.org](https://my.telegram.org/).
-  * `BOT_TOKEN` - Your bot's token from [@BotFather](https://t.me/BotFather).
-  * `BOT_USERNAME` - Your bot's username (e.g., `MaestroBot`).
-  * `OWNER_ID` - Your Telegram User ID. This user will have full control over the bot.
-  * `SUDO_USERS` - (Optional) A space-separated list of Telegram User IDs who will have sudo access (e.g., `123456789 987654321`).
-  * `MONGO_URI` - Connection URI for your MongoDB database. Get a free tier from [MongoDB Atlas](https://www.mongodb.com/atlas).
-  * `REDIS_URI` - Connection URI for your Redis instance. Get a free tier from [RedisLabs](https://www.google.com/search?q=https://redislabs.com/try-free/).
-  * `RABBITMQ_URI` / `KAFKA_URI` - Connection URI for your Message Broker (choose one). Used for inter-service communication.
-  * `CREATOR_CHANNEL_ID` - The numeric ID of your mandatory Telegram channel (e.g., `-1001234567890`).
-  * `CREATOR_CHANNEL_LINK` - The invite link to your mandatory Telegram channel (e.g., `https://t.me/your_channel_username`).
-  * `DONATION_LINK` - (Optional) Your personal donation link (e.g., `https://saweria.co/yourname`).
+| Variable            | Description                                  | Required |
+|---------------------|----------------------------------------------|----------|
+| API_ID              | Telegram API ID ([my.telegram.org](https://my.telegram.org/)) | Yes      |
+| API_HASH            | Telegram API Hash ([my.telegram.org](https://my.telegram.org/)) | Yes      |
+| BOT_TOKEN           | Bot token from [@BotFather](https://t.me/BotFather) | Yes      |
+| BOT_USERNAME        | Your bot's username (e.g., MaestroBot)       | Yes      |
+| OWNER_ID            | Your Telegram User ID                        | Yes      |
+| SUDO_USERS          | (Optional) Space-separated sudo user IDs     | No       |
+| MONGO_URI           | MongoDB connection URI ([MongoDB Atlas](https://www.mongodb.com/atlas)) | Yes      |
+| REDIS_URI           | Redis connection URI ([RedisLabs](https://redislabs.com/try-free/)) | Yes      |
+| RABBITMQ_URI / KAFKA_URI | (Optional) Message Broker URI           | No       |
+| CREATOR_CHANNEL_ID  | Numeric ID of your Telegram channel          | Yes      |
+| CREATOR_CHANNEL_LINK| Invite link to your Telegram channel         | Yes      |
+| DONATION_LINK       | (Optional) Donation link                     | No       |
 
------
+---
 
 ## ⚙️ Deployment Guides
 
 ### Deploy to Heroku
 
-Get the [Necessary Variables](#-necessary-variables) and then click the button below!
+1. Prepare [Environment Variables](#-environment-variables).
+2. Click the button below:
 
 <details>
 <summary>Deploy to Heroku</summary>
@@ -97,7 +100,8 @@ Get the [Necessary Variables](#-necessary-variables) and then click the button b
 
 ### Deploy to Okteto
 
-Get the [Necessary Variables](#-necessary-variables) and then click the button below!
+1. Prepare [Environment Variables](#-environment-variables).
+2. Click the button below:
 
 <details>
 <summary>Deploy to Okteto</summary>
@@ -107,279 +111,204 @@ Get the [Necessary Variables](#-necessary-variables) and then click the button b
 </a>
 </details>
 
-### Deploy to VPS (Docker Recommended)
+### Deploy to VPS (Docker)
 
-This is the recommended method for stable, production-grade deployments.
+**Recommended for production!**
 
-1. **Install Docker & Docker Compose**: Follow official Docker documentation for your VPS OS.
-2. **Clone the repository**:
+1. Install Docker & Docker Compose.
+2. Clone this repo:
     ```bash
     git clone https://github.com/aes-co/MaestroBot.git
     cd MaestroBot
     ```
-3. **Create `.env` file**: Copy `.env.sample` to `.env` and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
+3. Copy `.env.sample` to `.env` and fill in your [environment variables](#-environment-variables).
     ```bash
     cp .env.sample .env
-    # Edit .env file with your variables
+    # Edit .env with your variables
     ```
-4. **Build and run with Docker Compose**:
+4. Build and run:
     ```bash
     docker-compose up --build -d
     ```
-    This will build Docker images for each service, set up MongoDB, Redis, and your Message Broker, and run everything in detached mode.
 
 ### Deploy Locally
 
-Ideal for development and testing. Docker Compose is highly recommended.
-
-1. **Install Docker & Docker Compose**: Follow official Docker documentation.
-2. **Clone the repository**:
+1. Install Docker & Docker Compose.
+2. Clone the repository:
     ```bash
     git clone https://github.com/aes-co/MaestroBot.git
     cd MaestroBot
     ```
-3. **Create `.env` file**: Copy `.env.sample` to `.env` and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
-    ```bash
-    cp .env.sample .env
-    # Edit .env file with your variables
-    ```
-4. **Run with Docker Compose**:
+3. Fill `.env` as above.
+4. Run:
     ```bash
     docker-compose up --build
     ```
-    This will run all services in your local environment.
 
 ### Deploy to Termux
 
-Suitable for light personal use and testing on Android. External DB/Cache is highly recommended.
-
-1. **Install Termux**: Download from F-Droid.
-2. **Update packages and install Python & Git**:
+1. Install Termux from F-Droid.
+2. Update and install dependencies:
     ```bash
     pkg update && pkg upgrade
     pkg install python git ffmpeg
     ```
-3. **Clone the repository**:
+3. Clone the repo:
     ```bash
     git clone https://github.com/aes-co/MaestroBot.git
     cd MaestroBot
     ```
-4. **Create a virtual environment (optional but recommended)**:
+4. (Optional) Create virtual env:
     ```bash
     python -m venv venv
     source venv/bin/activate
     ```
-5. **Install Python requirements**:
+5. Install requirements:
     ```bash
     pip install -r requirements.txt
     ```
-6. **Create `.env` file**: Manually create a `.env` file and fill in your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables). Use cloud-hosted MongoDB/Redis.
-7. **Run the bot (simplified for Termux)**: You might need to run individual services or a combined script.
+6. Create `.env` and fill variables.
+7. Run:
     ```bash
-    # Example for Core Bot (assuming it's the main entry point)
     python -m maestrobot.__main__
-    # Use 'nohup' or 'tmux' to keep it running in background
     ```
 
 ### Deploy to Replit
 
-Good for quick demos and small-scale usage. External DB/Cache is mandatory.
+1. Create a new Repl (Python).
+2. Clone repo in shell:
+    ```bash
+    git clone https://github.com/aes-co/MaestroBot.git .
+    ```
+3. Install ffmpeg and requirements.
+4. Set environment variables in Secrets tab.
+5. Set run command to:
+    ```bash
+    python -m maestrobot.__main__
+    ```
 
-1. **Create a new Repl**: Select Python as the language.
-2. **Clone the repository**: Use the Replit shell to `git clone https://github.com/aes-co/MaestroBot.git .` (note the dot for current directory).
-3. **Install FFmpeg**: Add `apt-get update && apt-get install -y ffmpeg` to your `.replit` file's `run` command or a setup script.
-4. **Install Python requirements**: `pip install -r requirements.txt` in the shell.
-5. **Set Environment Variables**: Use Replit's "Secrets" tab to add all your [Necessary Variables](https://www.google.com/search?q=%23necessary-variables).
-6. **Run the bot**: Configure the `run` command in `.replit` to start your main bot script (e.g., `python -m maestrobot.__main__`). You might need to use a web server (like Flask/FastAPI) to keep the Repl "Always On".
-
------
+---
 
 ## 📂 Project Structure
 
-.
+```
+MaestroBot/
 ├── app.json
-├── CODE_OF_CONDUCT.md
-├── CONTRIBUTING.md
 ├── docker-compose.yml
 ├── Dockerfile
 ├── heroku.yml
-├── installer.sh
-├── install-termux
-├── LICENSE
 ├── okteto-pipeline.yml
-├── README.md
 ├── requirements.txt
+├── README.md
 ├── maestrobot/
-│ ├── init.py
-│ ├── main.py # Main entry point for the bot application
-│ ├── configs.py # Handles loading and accessing environment variables
-│ ├── db/ # Database models and interaction logic (MongoDB)
-│ │ ├── init.py
-│ │ ├── users.py # User profiles, channel membership status
-│ │ ├── settings.py # Bot-wide and group-specific settings, sudo users
-│ │ ├── queues.py # Music queues (per group and shared/global)
-│ │ └── playback_history.py # Stores song playback history for recommendations
-│ ├── handlers/ # Core bot command and callback handlers (python-telegram-bot)
-│ │ ├── init.py
-│ │ ├── start_help.py # /start, /help commands
-│ │ ├── music_commands.py # /play, /queue, /nowplaying
-│ │ ├── admin_commands.py # Moderation, promote/demote (e.g., /mute, /kick)
-│ │ ├── settings_commands.py # /bs, /bset, /botsetting menu interactions
-│ │ └── utility_commands.py # /id, /userinfo, /linkchannel, /support, /donate
-│ ├── assistant/ # Userbot core logic and orchestration (Pyrogram)
-│ │ ├── init.py
-│ │ ├── client.py # Pyrogram client setup
-│ │ ├── orchestrator.py # Manages the userbot pool, assigns tasks, handles status
-│ │ ├── voice_chat.py # PyTgCalls integration for audio streaming in voice chats
-│ │ └── userbot_handlers.py # Userbot-specific event handlers (e.g., voice chat join/leave)
-│ ├── plugins/ # Modular features, similar to a plugin system
-│ │ ├── init.py
-│ │ ├── music_controls.py # Handles inline button actions for playback control
-│ │ ├── lyrics.py # Lyrics search integration
-│ │ ├── recommendations.py # Music recommendation logic and commands
-│ │ ├── shared_queue.py # Commands and logic for global/shared queues
-│ │ ├── moderation_vc.py # Voice chat specific moderation commands
-│ │ ├── monitoring.py # /ping, /speedtest, /status commands
-│ │ └── restart.py # /restart command handler
-│ ├── media/ # Media processing and downloading
-│ │ ├── init.py
-│ │ ├── downloader.py # Integrates with yt-dlp for media fetching
-│ │ └── transcoder.py # Uses FFmpeg for audio quality conversion and formatting
-│ ├── utils/ # General utility functions and helpers
-│ │ ├── init.py
-│ │ ├── helpers.py # Generic helper functions, decorators
-│ │ ├── filters.py # Custom python-telegram-bot filters
-│ │ └── web_app.py # Utilities for Telegram Web App integration
-│ ├── web_app_backend/ # Backend service for the Telegram Mini App
-│ │ ├── init.py
-│ │ ├── app.py # Main FastAPI/Flask application for the Web App API
-│ │ └── routes.py # Defines API endpoints for the Web App frontend
-│ ├── startup/ # Scripts for initial application setup and client connections
-│ │ ├── init.py
-│ │ ├── bot_client.py # Initializes the python-telegram-bot client
-│ │ ├── userbot_clients.py # Initializes Pyrogram clients for the userbot pool
-│ │ └── db_connections.py # Handles connections to MongoDB and Redis
-│ └── strings/ # Localization files for multi-language support
-│ ├── init.py
-│ ├── en.yml # English language strings
-│ ├── id.yml # Indonesian language strings
-│ └── ... (other languages)
-├── resources/ # Static assets like logos, fonts, etc.
-│ ├── logo.png # Main logo for the bot
-│ ├── extras/ # Additional images or markdown files (e.g., tutorials)
-│ │ └── mona-whisper.gif # The cat logo
-│ └── fonts/ # Custom fonts for image generation (if applicable)
-└── scripts/ # Helper scripts for deployment or session generation
-├── session_generator.py # Script to generate Pyrogram session strings
-└── setup.sh # General setup script for local/Termux deployments
+│   ├── main.py
+│   ├── configs.py
+│   ├── db/
+│   ├── handlers/
+│   ├── assistant/
+│   ├── plugins/
+│   ├── media/
+│   ├── utils/
+│   ├── web_app_backend/
+│   ├── startup/
+│   └── strings/
+├── resources/
+│   ├── logo.png
+│   └── extras/
+└── scripts/
+```
 
-
------
+---
 
 ## 📊 Commands & Features
 
-Here's a comprehensive list of commands and features available in MaestroBot:
+### Music Playback & Controls
 
-### 🎵 Music Playback & Control
+- `/play <query>`: Play music from YouTube/Spotify/etc.
+- `/queue`: Show current queue.
+- `/nowplaying`: Show currently playing song with controls.
+- `/lyrics`: Fetch lyrics for the current song.
+- `/pause`, `/resume`: Pause or resume playback.
+- `/skip`: Skip current song.
+- `/stop`: Stop playback and clear queue.
+- `/forward <seconds>`, `/rewind <seconds>`: Seek through current song.
+- `/volume <0-200>`: Set playback volume.
+- `/quality <low/medium/high>`: Set audio quality.
 
-  * `/play <query>`: Play a song from YouTube/Spotify/etc.
-  * `/queue`: Show the current song queue.
-  * `/nowplaying`: Display the currently playing song with real-time progress and controls.
-  * `/lyrics`: Get lyrics for the current song.
-  * `/pause`, `/resume`: Pause or resume playback.
-  * `/skip`: Skip to the next song in the queue.
-  * `/stop`: Stop playback and clear the queue.
-  * `/forward <seconds>`, `/rewind <seconds>`: Seek forward/backward in the current song.
-  * `/volume <0-200>`: Adjust bot's volume.
-  * `/quality <low/medium/high>`: Set preferred audio quality.
+### Shared/Global Queue
 
-### 🔗 Shared/Global Queue
+- `/createqueue`: Create a shared queue.
+- `/joinqueue <id>`: Join an existing queue.
+- `/leavequeue`: Leave current shared queue.
+- `/myqueue`: Show your shared queue.
 
-  * `/createqueue`: Create a new shared queue and get its ID.
-  * `/joinqueue <id>`: Join an existing shared queue.
-  * `/leavequeue`: Leave the current shared queue.
-  * `/myqueue`: View your current shared queue (if joined).
+### Admin & Moderation
 
-### 🤖 Admin & Moderation
+- `/mute @user`: Mute user in VC.
+- `/unmute @user`: Unmute user in VC.
+- `/kick @user`: Remove user from VC.
+- `/admins`: List group admins.
+- `/promote`, `/demote`: Manage roles.
+- `/lock`, `/unlock`: Control message types.
+- `/rules`: Set/group rules.
+- `/welcome`: Set welcome message.
 
-  * `/mute @user`: Mute a user in the voice chat.
-  * `/unmute @user`: Unmute a user in the voice chat.
-  * `/kick @user`: Kick a user from the voice chat.
-  * `/admins`: List group admins.
-  * `/promote`, `/demote`: Promote/demote users (if bot is admin with rights).
-  * `/lock`, `/unlock`: Lock/unlock certain message types.
-  * `/rules`: Set/get group rules.
-  * `/welcome`: Set/get welcome message.
+### Utilities
 
-### 🛠️ Utilities
+- `/id`: Show your or chat ID.
+- `/userinfo <username/reply>`: Show info about user.
+- `/groupinfo`: Show group info.
+- `/linkchannel`: Show channel link.
+- `/support`, `/donate`: Show support/donation info.
 
-  * `/id`: Get your Telegram ID or chat ID.
-  * `/userinfo <reply/username>`: Get information about a user.
-  * `/groupinfo`: Get information about the current group.
-  * `/linkchannel`: Get the mandatory channel link.
-  * `/support`, `/donate`: Get information on how to support the creator.
+### Bot Settings (Admin)
 
-### ⚙️ Bot Settings (Admin Only)
+- `/bs`, `/bset`, `/botsetting`: Access settings menu (add/remove sudo, channel setup, volume, API keys, etc).
 
-  * `/bs`, `/bset`, `/botsetting`: Access the interactive bot settings menu.
-      * `Add Sudo User`: Add a new sudo user by ID.
-      * `Remove Sudo User`: Remove a sudo user by ID.
-      * `Set Creator Channel`: Update mandatory channel link/ID.
-      * `Set Default Volume`: Configure default playback volume.
-      * `Manage API Keys`: Update various API keys (e.g., lyrics API).
-      * And more... (all managed interactively)
+### Monitoring & Control (Admin)
 
-### 📈 Monitoring & Control (Admin Only)
+- `/ping`: Check bot status.
+- `/speedtest`: Run server speedtest.
+- `/status`: Show service health.
+- `/restart`: Restart bot.
 
-  * `/ping`: Check bot's responsiveness and API latency.
-  * `/speedtest`: Run an internet speed test from the bot's server.
-  * `/status`: Get detailed status of all bot services (CPU, RAM, service health, assistant status).
-  * `/restart`: Gracefully restart the bot's core services.
+### AI Tools (Planned)
 
-### 🧠 AI Tools (Future Expansion)
+- `/recommend`: Get music recommendations.
 
-  * `/recommend`: Get music recommendations based on playback history.
-
------
+---
 
 ## 💡 Technologies
 
-  * **Python 3.10+**: The core programming language for all services.
-  * **Pyrogram**: For powerful Userbot (assistant) interactions and native PyTgCalls integration.
-  * **python-telegram-bot (PTB)**: For robust Bot API handling and user-friendly command/conversation management.
-  * **PyTgCalls**: The official library for Telegram Voice Chat streaming.
-  * **MongoDB**: Primary persistent database for all bot data.
-  * **Redis**: High-performance cache and Pub/Sub for real-time communication.
-  * **RabbitMQ / Kafka**: Message Broker for asynchronous inter-service communication.
-  * **Docker / Docker Compose**: For containerization and easy multi-service deployment.
-  * **FFmpeg**: Essential media processing tool for audio handling.
-  * **HTML / CSS / JavaScript**: For the Telegram Web App (Mini App) frontend.
-  * **yt-dlp**: For downloading media from various platforms.
+- **Python 3.10+**
+- **Pyrogram** (userbot, PyTgCalls integration)
+- **python-telegram-bot** (Bot API)
+- **PyTgCalls** (Voice chat streaming)
+- **MongoDB** (Database)
+- **Redis** (Cache & Pub/Sub)
+- **RabbitMQ/Kafka** (Message broker)
+- **Docker/Docker Compose** (Containerization)
+- **FFmpeg** (Media processing)
+- **yt-dlp** (Media download)
+- **HTML/CSS/JS** (Web App)
 
------
+---
 
 ## ❤️ Credits & Acknowledgments
 
-This project stands on the shoulders of giants and is made possible by various open-source contributions and inspirations:
+This project is built on and inspired by:
 
-  * **Team Ultroid**: The structure and organizational style of this `README.md` and the overall project directory layout are heavily inspired by the [TeamUltroid/Ultroid](https://github.com/TeamUltroid/Ultroid) project. Their comprehensive userbot design provided invaluable reference.
-  * **aes-co/modcore**: The initial `README.md` style, aesthetic, and the foundational idea of a modular Telegram bot framework were inspired by the [aes-co/modcore](https://github.com/aes-co/modcore) project.
-  * **Pyrogram**: The robust and modern Telegram MTProto API client library for Python.
-  * **python-telegram-bot**: The excellent and user-friendly library for the Telegram Bot API.
-  * **PyTgCalls**: The powerful Python library for Telegram Group Calls, developed by MarshalX.
-  * **yt-dlp**: The versatile command-line program to download videos and audio from various websites.
-  * **FFmpeg**: The leading multimedia framework for handling audio and video.
-  * **MongoDB, Redis, RabbitMQ/Kafka**: Essential open-source database and message broker technologies that power the distributed architecture.
+- [TeamUltroid/Ultroid](https://github.com/TeamUltroid/Ultroid)
+- [aes-co/modcore](https://github.com/aes-co/modcore)
+- Pyrogram, python-telegram-bot, PyTgCalls, yt-dlp, FFmpeg, MongoDB, Redis, RabbitMQ/Kafka, and all open-source contributors.
 
-We are immensely grateful to the creators and maintainers of these projects and all open-source contributors for their hard work. This project would not be possible without them.
-
------
+---
 
 ## 🗓️ License
 
-This project is licensed under the **MIT License**. Feel free to use, modify, and distribute it with proper attribution.
+MIT License — see [LICENSE](LICENSE).
 
------
+---
 
 <p align="center">
   <i>Made with ❤️ by <a href="https://t.me/aesneverhere">@aes-co</a></i>
